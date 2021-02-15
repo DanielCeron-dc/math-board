@@ -1,11 +1,15 @@
-import React from 'react';
+import React, {useContext} from 'react';
 import Center from './Components/Position/Center';
 import Navbar from './Components/UI/Navbar';
 import Content from './Containers/Content';
-import usePageDimension from './hooks/usePageDimensions';
+
+import PageDimensionContext from "./Context/PageDimensions/PagedimensionsContext";
+
+
 
 function App() {
-  const [windowHeight] = usePageDimension();
+  
+  const {windowHeight, windowWidth} = useContext(PageDimensionContext); 
 
   return (
     <div className="App" style = {{height: windowHeight, backgroundColor: "black"}}>

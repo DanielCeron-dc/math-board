@@ -4,9 +4,18 @@ import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 
+import PageDimensionsProvider from "./Context/PageDimensions";
+import CanvasDrawProvider from "./Context/CanvasDraw"; 
+import { CanvasDrawContext } from './Context/CanvasDraw/CanvasDrawContext';
+
+
 ReactDOM.render(
   <React.StrictMode>
-    <App />
+    <CanvasDrawProvider>
+      <PageDimensionsProvider>
+        <App />
+      </PageDimensionsProvider>
+    </CanvasDrawProvider>
   </React.StrictMode>,
   document.getElementById('root')
 );
