@@ -9,6 +9,7 @@ const Row:React.FC<RowProps> = (props) => {
        display:"flex",
        width: "100%",
        alignItems:"center",
+       flexWrap: "wrap"
     }}>{props.children}</div>
 }
 export default Row;

@@ -27,7 +27,7 @@ const Button:React.FC<ButtonProps> = (props) => {
         cursor: "pointer"
     }
     
-    return<button style = {hover ? hoverStyle : style} onMouseOver = {() => setHover(true)} onMouseLeave = {() => setHover(false)}>
+    return<button style = {hover ? hoverStyle : style} onMouseOver = {() => setHover(true)} onMouseLeave = {() => setHover(false)} onClick = {props.onClick}>
         {props.children}
     </button>
 }

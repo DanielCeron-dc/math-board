@@ -6,16 +6,18 @@ import reportWebVitals from './reportWebVitals';
 
 import PageDimensionsProvider from "./Context/PageDimensions";
 import CanvasDrawProvider from "./Context/CanvasDraw"; 
-import { CanvasDrawContext } from './Context/CanvasDraw/CanvasDrawContext';
+import AuthProvider from "./Context/Auth"; 
 
 
 ReactDOM.render(
   <React.StrictMode>
-    <CanvasDrawProvider>
-      <PageDimensionsProvider>
-        <App />
-      </PageDimensionsProvider>
-    </CanvasDrawProvider>
+    <AuthProvider>
+      <CanvasDrawProvider>
+        <PageDimensionsProvider>
+          <App />
+        </PageDimensionsProvider>
+      </CanvasDrawProvider>
+    </AuthProvider>
   </React.StrictMode>,
   document.getElementById('root')
 );

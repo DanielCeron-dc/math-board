@@ -2,22 +2,33 @@ import React, { useContext } from 'react';
 
 import Row from '../Components/Position/Row';
 import Spacer from '../Components/Position/Spacer';
+import Button from "../Components/UI/Button"; 
 
 import Menu from '../Components/Menu';
 import CustomCanvasDraw from './CustomCanvasDraw';
+import PageDimensionContext from '../Context/PageDimensions/PagedimensionsContext';
+import Center from '../Components/Position/Center';
 
-type ContentProps = {
-    
-};
+import {singOutFromGoogle} from "../firebase";
 
-const Content:React.FC<ContentProps> = () => {
+
+const Content:React.FC = () => {
     
-    return <Row>
+    const {windowHeight} = useContext(PageDimensionContext); 
+
+    return <>
+        <Button onClick = {singOutFromGoogle} > Log out </Button>
+        <Center heightAvailable={(windowHeight)}>
+        <Row>
             <Spacer/>
             <Menu/>
             <Spacer/>
             <CustomCanvasDraw/>
             <Spacer/>
         </Row>
+        </Center>
+    </> 
+    
+    
 }
 export default Content;

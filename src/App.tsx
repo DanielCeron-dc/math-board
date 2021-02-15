@@ -2,7 +2,6 @@ import React, {useContext} from 'react';
 
 
 import Center from './Components/Position/Center';
-import Navbar from './Components/UI/Navbar';
 import Content from './Containers/Content';
 import Auth from './Containers/Auth/Auth';
 
@@ -13,31 +12,29 @@ import {
   BrowserRouter as Router,
   Switch,
   Route,
-  Link,
-  useRouteMatch,
-  useParams
+  Redirect
 } from "react-router-dom";
+import { AuthContext } from './Context/Auth/AuthContext';
 
 
 
 function App() {
   
-  const {windowHeight, windowWidth} = useContext(PageDimensionContext); 
+  const {user} = useContext(AuthContext); 
 
   return (
     <Router>
-      <div className="App" style = {{height: windowHeight, backgroundColor: "black"}}>
-      <Navbar/>
-      <Center heightAvailable={(windowHeight-50)}>
+      <div className="App" style = {{background: "linear-gradient(356deg, rgba(45,33,65,1) 35%, rgba(127,50,190,1) 100%)"}}>
         <Switch>
             <Route path="/auth">
-              <Auth/>
+              <h1 style = {{ margin: 0, padding: 50, position: "fixed"}}>Math Board</h1>
+                {user == null ? <Auth/> : <Redirect to="/"/>}
             </Route>
             <Route path="/">
-              <Content/>
+                {user != null ? <Content/> : <Redirect to="/auth" />}
             </Route>
         </Switch>
-      </Center>
+     
       </div>
     </Router>
     

@@ -7,7 +7,7 @@ const LoginForm:React.FC = () => {
     
     const [loginFormState, updateLoginForm, cleanLoginForm] = useForm(Login);
 
-    return <div style = {{backgroundColor:"grey", padding : "20px"}}>
+    return <div style = {{backgroundColor:"grey", padding : "20px", borderRadius: 50}}>
         <h1>Login</h1>
         <Form form = {loginFormState} updateValues = {updateLoginForm} submit = {cleanLoginForm}  />
     </div>
