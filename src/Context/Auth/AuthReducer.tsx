@@ -1,12 +1,19 @@
 interface IState {
-    user: any
+    user: IUser | null,
+}
+
+export interface IUser {
+    displayName: string | null,
+    photoURL: string | null,
+    email: string | null,
+    uid : string
 }
 
 type IAction = 
  | {
     type: 'CHANGE_USER_STATE',
     payload: {
-        user: any
+        user:IUser|null,
     },
 }
 

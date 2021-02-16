@@ -1,6 +1,6 @@
 import React, {useCallback, useEffect, useReducer} from 'react';
 import { AuthContext } from './AuthContext';
-import AuthReducer, {initialState} from './AuthReducer';
+import AuthReducer, {initialState, IUser} from './AuthReducer';
 import {auth} from "../../firebase";
 
 const Index:React.FC = (props) => {
@@ -8,8 +8,8 @@ const Index:React.FC = (props) => {
     const [state, dispatch] = useReducer(AuthReducer, initialState); 
 
     useEffect(() => {
-        let unsubscribeFromAuth = auth.onAuthStateChanged(user => {
-            console.log( "AuthProvider:" + user);
+        let unsubscribeFromAuth = auth.onAuthStateChanged((user:IUser|null) => {
+            console.log( "AuthProvider:" + user?.uid);
             
             dispatch({type: "CHANGE_USER_STATE", payload: {user}});
         });
