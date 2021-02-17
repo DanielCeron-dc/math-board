@@ -1,69 +1,67 @@
 import React, { useCallback, useContext, useEffect, useRef, useState } from 'react';
 import CanvasDraw from 'react-canvas-draw';
-import { firestore } from "../firebase";
 
 import {CanvasDrawContext} from "../Context/CanvasDraw/CanvasDrawContext";
 import PageDimensionContext from '../Context/PageDimensions/PagedimensionsContext';
+import { Convert } from '../tools/Convert';
+import { IDrawInfo, Line } from '../hooks/useDB';
+import { AuthContext } from '../Context/Auth/AuthContext';
+
+import useDb from "../hooks/useDB";
 
 
 
 const CustomCanvasDraw:React.FC= () => {
     const {color, brushRadius} = useContext(CanvasDrawContext);
     const {windowHeight, windowWidth} = useContext(PageDimensionContext); 
-    let canvasFromFirestore: string = ""; 
+    const {user} = useContext( AuthContext);
     const canvasRef = useRef<CanvasDraw>(null); 
     const [hideMouse, sethideMouse] = useState(false); 
 
-    useEffect( () => {
-        let unsubscribe: () => void; 
-        wait = true; 
-        initializeCanvas().then((res) =>{
-            unsubscribe = res; 
-        }); 
-        setTimeout(() => {
-            wait = false;
-        }, 4000);
-        return () => {
-            unsubscribe(); 
-        }
-    }, [])
+    const [GlobalCanvas, updateCanvasFromActualUser] = useDb(user?.uid ? user?.uid : "" ); 
 
+    let evitOnChange:Boolean = false; 
 
-    const initializeCanvas = async(): Promise<(() => void)> => {
-        return await firestore.collection("board1").doc("savedCanvas").onSnapshot((snapshot) => {
-            //canvasFromFirestore = snapshot.data()?.savedCanvas;
-            //canvasRef.current?.loadSaveData(canvasFromFirestore);
-        });
-    }
+    useEffect(() => {
+        GlobalCanvas.height = 700;
+        GlobalCanvas.width = 900; 
+        canvasRef.current?.loadSaveData(Convert.IDrawInfoToJson(GlobalCanvas)); 
+        evitOnChange = true;
         
-    let wait: boolean = false; 
-
-
+    }, [GlobalCanvas])
 
     const onChange = useCallback(
         async() => {
-            let newValue:string|undefined = canvasRef.current?.getSaveData();
-             if (newValue != canvasFromFirestore && wait == false){
-                 wait = true;
-                 console.log("ENTRE");
-                 
-                 await firestore.collection("board1").doc("savedCanvas").update({savedCanvas: newValue});
-                 setTimeout(() => {
-                     wait = false;
-                 }, 4000);
-             }},
+            if (evitOnChange){
+                console.log("se evitó el onchange");
+                setTimeout(() => {
+                    evitOnChange = false; 
+                    
+                }, 500);
+                return;
+            }
+
+
+            let newValue:string = canvasRef.current?.getSaveData() ? canvasRef.current?.getSaveData() : "";
+            let value:IDrawInfo =  Convert.toIDrawInfo(newValue); 
+            
+            if (value && user?.uid){
+                updateCanvasFromActualUser( value , user?.uid );
+                evitOnChange = true; 
+            }
+            console.log(value);
+        },
         [],
-    ) 
-    
+    ); 
 
     return <div style = {{ cursor: hideMouse ? "crosshair" : "initial"}} onMouseOver = {() =>sethideMouse(true)} onMouseLeave = {() => sethideMouse(false)}>
                 <CanvasDraw 
+                
         brushRadius = {brushRadius} 
         brushColor = {color} 
         lazyRadius = {0}
-        saveData={ canvasFromFirestore}
-        canvasHeight = {windowHeight*0.8} 
-        canvasWidth = {windowWidth*0.65} 
+        canvasHeight = {700} 
+        canvasWidth = {900} 
         immediateLoading
         hideInterface
         ref = {canvasRef}

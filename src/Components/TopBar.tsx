@@ -23,7 +23,6 @@ const TopBar:React.FC<TopBarProps> = () => {
         borderRadius: 50,
         padding: 8,
         margin: 10
-
     }}><Row>
             <Button onClick = {singOutFromGoogle} > Log out </Button>
             <DisplayName name = {displayName} photo = {photo} />
