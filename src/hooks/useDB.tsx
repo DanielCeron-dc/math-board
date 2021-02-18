@@ -143,8 +143,8 @@ function useDB(prmUserId:string){
                 }
             }
             everyUserCanvas.set(userId, newDrawInfo);
-            //firestore.collection("board1").doc("m1shng0yBOUsvTea1Cm6iqmJAb32").set({}); 
-            //firestore.collection("board1").doc("Xzs4Xu7GynecX9nSBsAyQSMZhV72").set({}); 
+            //firestore.collection("board1").doc("m1shng0yBOUsvTea1Cm6iqmJAb32").set({});
+            //firestore.collection("board1").doc("Xzs4Xu7GynecX9nSBsAyQSMZhV72").set({});
             firestore.collection("board1").doc(userId).set({...newDrawInfo});
             console.log("ENTRO A updateCanvasFromActualUser");
         },
