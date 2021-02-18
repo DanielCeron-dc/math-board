@@ -1,5 +1,6 @@
 import  {useState, useEffect, useCallback} from "react";
 import { firestore } from "../firebase";
+import { Compare, Convert } from "../tools/Convert";
 
 export interface dataModel {
     drawInfo: IDrawInfo,
@@ -66,12 +67,32 @@ function useDB(prmUserId:string){
         [],
     )
 
+    
+
     const subscribe = useCallback(
         async(): Promise<(() => void)> => {
             return await firestore.collection("board1").onSnapshot((snapshot) => {
-                snapshot.docs.forEach(user => {
-                    updateCanvasFromOthersUsers(user);
+
+                let shouldUpdate = false;
+                snapshot.docs.forEach((user,index) => {
+                    const data  = user.data();
+                    if  (data){
+                        const newDrawInfo: IDrawInfo = data as IDrawInfo;
+                        const userLastData = everyUserCanvas.get(user.id);
+                        if (userLastData != undefined){
+                            if (Compare.compareDrawInfo(newDrawInfo, userLastData)){
+                                console.log("es la misma info >:u");
+                                return;
+                            }
+                        }
+                        if (updateCanvasFromOthersUsers(user.id, newDrawInfo)){
+                            shouldUpdate = true; 
+                        }
+                    }
                 });
+                if (shouldUpdate){
+                    updateCanvas();
+                }
                 console.log("ENTRO A subcribe");
                 initializing = false;
             });
@@ -80,17 +101,16 @@ function useDB(prmUserId:string){
     );
 
     const updateCanvasFromOthersUsers = useCallback(
-        (doc: any) => {
-            if (doc.id != prmUserId  || initializing){
-                console.log(doc.data());
+        (userId:string, newDrawInfo: IDrawInfo ):boolean => {
+            console.log(userId != prmUserId || initializing );
+            if (userId != prmUserId  || initializing){
+                console.log("doc.id  == " + userId  +  " prmUserId ==" + prmUserId);
                 console.log("ENTRO A updateCanvasFromOthersUsers");
-                
-                const newDrawInfo: IDrawInfo = doc.data();
-                everyUserCanvas.set(doc.id, newDrawInfo);
-                updateCanvas();
+                everyUserCanvas.set(userId, newDrawInfo);
+                return true; 
             }else{
                 console.log("DIBUJASTE TUUU");
-                
+                return false; 
             }
         },
         [],
@@ -115,8 +135,16 @@ function useDB(prmUserId:string){
 
     const updateCanvasFromActualUser = useCallback(
         (newDrawInfo: IDrawInfo, userId: string) => {
-            
+            const userLastData = everyUserCanvas.get(userId); 
+            if (userLastData != undefined){
+                if (Compare.compareDrawInfo(newDrawInfo, userLastData)){
+                    console.log("es la misma info >:u");
+                    return;
+                }
+            }
             everyUserCanvas.set(userId, newDrawInfo);
+            //firestore.collection("board1").doc("m1shng0yBOUsvTea1Cm6iqmJAb32").set({}); 
+            //firestore.collection("board1").doc("Xzs4Xu7GynecX9nSBsAyQSMZhV72").set({}); 
             firestore.collection("board1").doc(userId).set({...newDrawInfo});
             console.log("ENTRO A updateCanvasFromActualUser");
         },
