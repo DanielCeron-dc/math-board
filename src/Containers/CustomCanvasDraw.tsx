@@ -21,9 +21,8 @@ const CustomCanvasDraw:React.FC= () => {
 
     useEffect(() => {
         GlobalCanvas.height = 700;
-        GlobalCanvas.width = 900; 
+        GlobalCanvas.width = 1500; 
         totalLines = GlobalCanvas.lines.length; 
-         
         canvasRef.current?.loadSaveData(Convert.IDrawInfoToJson(GlobalCanvas), true); 
         counter++;
         console.log(counter);
@@ -58,7 +57,7 @@ const CustomCanvasDraw:React.FC= () => {
                     brushColor = {color}
                     lazyRadius = {0}
                     canvasHeight = {700}
-                    canvasWidth = {900}
+                    canvasWidth = {1500}
                     immediateLoading
                     hideInterface
                     ref = {canvasRef}

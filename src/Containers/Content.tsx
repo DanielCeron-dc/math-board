@@ -16,15 +16,9 @@ const Content:React.FC = () => {
     const {windowHeight} = useContext(PageDimensionContext); 
 
     return <>
-        <TopBar/>
         <Center heightAvailable={(windowHeight)}>
-        <Row>
-            <Spacer/>
             <Menu/>
-            <Spacer/>
             <CustomCanvasDraw/>
-            <Spacer/>
-        </Row>
         </Center>
     </> 
     

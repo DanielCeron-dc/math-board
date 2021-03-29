@@ -19,7 +19,6 @@ const TopBar:React.FC<TopBarProps> = () => {
     
     return <div style = {{
         backgroundColor: "white",
-        position: "fixed",
         borderRadius: 50,
         padding: 8,
         margin: 10
