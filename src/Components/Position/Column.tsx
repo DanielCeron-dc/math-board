@@ -4,8 +4,6 @@ type ColumnProps = {
     alignItems?: string
 };
 
-
-
 const Column:React.FC<ColumnProps> = (props) => {
 
     const style:CSSProperties = {

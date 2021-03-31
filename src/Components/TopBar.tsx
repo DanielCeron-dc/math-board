@@ -16,7 +16,6 @@ const TopBar:React.FC<TopBarProps> = () => {
      let displayName:string = user?.displayName  ?  user?.displayName : "";
      let photo:string = user?.photoURL  ?  user?.photoURL : "";
     
-    
     return <div style = {{
         backgroundColor: "white",
         borderRadius: 50,

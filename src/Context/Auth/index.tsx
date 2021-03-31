@@ -1,4 +1,4 @@
-import React, {useCallback, useEffect, useReducer} from 'react';
+import React, {useEffect, useReducer} from 'react';
 import { AuthContext } from './AuthContext';
 import AuthReducer, {initialState, IUser} from './AuthReducer';
 import {auth} from "../../firebase";
